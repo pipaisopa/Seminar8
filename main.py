@@ -3,7 +3,7 @@ def work_with_phonebook():
     
     phone_book = read_txt('phone.txt')
 
-    while choice != 7:
+    while choice != 8:
         if choice == 1:
             print_result(phone_book)
         elif choice == 2:
@@ -24,26 +24,32 @@ def work_with_phonebook():
             add_user(phone_book, user_data)
             write_txt('phonebook.txt', phone_book)
         elif choice == 7:
-            target_filename = "target_phone.txt"
-            line_number = int(input("Введите номер строки для копирования: "))
-            copy_line_to_file('phone.txt', target_filename, line_number)
+            copy_line_to_another_file()
         
         choice = show_menu()
 
-def copy_line_to_file(source_filename, target_filename, line_number):
-    with open(source_filename, 'r', encoding='utf-8') as source_file:
-        lines = source_file.readlines()
+def copy_line_to_another_file():
+    try:
+        source_filename = 'phone.txt'
+        destination_filename = input("Введите имя файла для копирования: ")
+        line_number = int(input("Введите номер строки для копирования: "))
+        
+        with open(source_filename, 'r', encoding='utf-8') as src_file:
+            lines = src_file.readlines()
+            
+            if line_number < 1 or line_number > len(lines):
+                print("Ошибка: Номер строки выходит за пределы допустимого диапазона.")
+                return
 
-    if line_number < 1 or line_number > len(lines):
-        print(f"Строка с номером {line_number} не существует в файле {source_filename}")
-        return
+            line_to_copy = lines[line_number - 1].strip()
+            print(f"Скопированная строка: {line_to_copy}")
 
-    line_to_copy = lines[line_number - 1]
-
-    with open(target_filename, 'a', encoding='utf-8') as target_file:
-        target_file.write(line_to_copy)
-
-    print(f"Строка номер {line_number} скопирована из {source_filename} в {target_filename}")
+        with open(destination_filename, 'a', encoding='utf-8') as dest_file:
+            dest_file.write(line_to_copy + '\n')
+        
+        print(f"Строка номер {line_number} успешно скопирована в файл {destination_filename}.")
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
 
 def add_user(phone_book, user_data):
     fields = ['Фамилия', 'Имя', 'Телефон', 'Описание']
