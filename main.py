@@ -35,7 +35,7 @@ def copy_line_to_another_file():
         line_number = int(input("Введите номер строки для копирования: "))
 
         with open(source_filename, 'r', encoding='utf-8') as src_file:
-            lines = src_file.readlines()
+            lines = [line for line in src_file if line.strip()] #пропускаем пустые строки
             print(f"Количество строк в исходном файле: {len(lines)}")
 
             # Проверка диапазона
