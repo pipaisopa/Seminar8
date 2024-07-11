@@ -33,20 +33,22 @@ def copy_line_to_another_file():
         source_filename = 'phone.txt'
         destination_filename = input("Введите имя файла для копирования: ")
         line_number = int(input("Введите номер строки для копирования: "))
-        
+
         with open(source_filename, 'r', encoding='utf-8') as src_file:
             lines = src_file.readlines()
-            
+            print(f"Количество строк в исходном файле: {len(lines)}")
+
+            # Проверка диапазона
             if line_number < 1 or line_number > len(lines):
                 print("Ошибка: Номер строки выходит за пределы допустимого диапазона.")
                 return
 
-            line_to_copy = lines[line_number - 1].strip()
+            line_to_copy = lines[line_number - 1].strip()  # Убираем символы новой строки
             print(f"Скопированная строка: {line_to_copy}")
 
         with open(destination_filename, 'a', encoding='utf-8') as dest_file:
-            dest_file.write(line_to_copy + '\n')
-        
+            dest_file.write(line_to_copy + '\n')  # Добавляем символ новой строки
+
         print(f"Строка номер {line_number} успешно скопирована в файл {destination_filename}.")
     except Exception as e:
         print(f"Произошла ошибка: {e}")
@@ -92,9 +94,11 @@ def read_txt(filename):
     fields = ['Фамилия', 'Имя', 'Телефон', 'Описание']
 
     with open(filename, 'r', encoding='utf-8') as phb:
-        for line in phb:
-            record = dict(zip(fields, line.strip().split(',')))
-            phone_book.append(record)
+        lines = phb.readlines()
+        for line in lines:
+            if line.strip(): #пропускаем пустые строки
+                record = dict(zip(fields, line.strip().split(',')))
+                phone_book.append(record)
 
     return phone_book
 
